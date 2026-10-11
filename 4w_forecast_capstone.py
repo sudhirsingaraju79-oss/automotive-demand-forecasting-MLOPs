@@ -3237,11 +3237,11 @@ psutil==5.9.5
     - Add a note and select all required scopes.
     - Click ***Generate token***.
     - Copy the generated token and store it safely in a notepad.
-"""
+#"""
 
 
 
-"""```
+#"""```
 name: Automotive Forecast Pipeline
 
 on:
@@ -3303,7 +3303,6 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python tourism_project/hosting/hosting.py
-
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
