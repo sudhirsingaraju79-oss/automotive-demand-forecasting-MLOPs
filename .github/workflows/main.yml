@@ -1,0 +1,108 @@
+name: Automotive Forecasting and Statistical Sample Planning
+
+# Save this file as .github/workflows/mlops.yml in your GitHub repository.
+# Supported layout:
+#   automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py (or repository root)
+#   data/Final_vehicle_macrodata_2016_2026.xlsx (or repository root)
+# Python retains its configured 120-month study and 108/12 chronological split.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py"
+      - "4w_forecast_capstone_statistical_sample.py"
+      - "data/Final_vehicle_macrodata_2016_2026.xlsx"
+      - "Final_vehicle_macrodata_2016_2026.xlsx"
+      - ".github/workflows/mlops.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: automotive-forecast-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      CAPSTONE_OUTPUT_DIR: outputs/automotive_capstone
+      MPLBACKEND: Agg
+      PYTHONUNBUFFERED: "1"
+      OMP_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.2.6 pandas==2.2.3 scipy==1.15.3 scikit-learn==1.6.1 statsmodels==0.14.4 matplotlib==3.10.3 openpyxl==3.1.5 xgboost==3.0.2
+          mkdir -p outputs
+          python -m pip freeze > outputs/environment.txt
+
+      - name: Locate and validate input files
+        shell: bash
+        run: |
+          set -euo pipefail
+          script="automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py"
+          if [[ ! -f "$script" ]]; then
+            script="4w_forecast_capstone_statistical_sample.py"
+          fi
+          data="data/Final_vehicle_macrodata_2016_2026.xlsx"
+          if [[ ! -f "$data" ]]; then
+            data="Final_vehicle_macrodata_2016_2026.xlsx"
+          fi
+          test -f "$script" || { echo "Revised Python script is missing."; exit 1; }
+          test -f "$data" || { echo "Input Excel dataset is missing."; exit 1; }
+          echo "CAPSTONE_SCRIPT=$script" >> "$GITHUB_ENV"
+          echo "CAPSTONE_DATA_FILE=$data" >> "$GITHUB_ENV"
+          python -m py_compile "$script"
+
+      - name: Run complete forecasting and statistical sample planning
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$CAPSTONE_SCRIPT" 2>&1 | tee outputs/execution.log
+
+      - name: Verify statistical sample-size outputs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import pandas as pd
+          root = Path(os.environ["CAPSTONE_OUTPUT_DIR"])
+          plan = pd.read_csv(root / "Statistics/statistical_sample_size_planning.csv")
+          assert set(plan["RQ"]) == {f"RQ{i}" for i in range(1, 7)}
+          valid = plan.dropna(subset=["Required_independent_N"])
+          assert (valid["Power_at_required_N"] >= valid["Target_marginal_power"] - 1e-9).all()
+          assert (valid["Power_at_previous_N"] < valid["Target_marginal_power"]).all()
+          assert (plan["Actual_N"] >= 0).all()
+          assert (root / "Statistics/sample_size_assumptions.csv").is_file()
+          assert (root / "Statistics/sample_size_planning_comparison.png").is_file()
+          print(plan[["RQ", "Task", "Actual_N", "Required_independent_N", "Status"]].to_string(index=False))
+          PY
+
+      - name: Save results and execution log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automotive-capstone-${{ github.run_number }}
+          path: outputs/
+          if-no-files-found: warn
+          retention-days: 30
