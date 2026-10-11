@@ -1,0 +1,13 @@
+Item,Value
+Family significance level,0.05
+Target marginal power per comparison,0.8
+Prespecified paired standardized effect,0.5
+Prespecified partial-F effect f2,0.15
+Planning multiplicity,Bonferroni allocation; existing analysis uses Holm
+Paired planning assumptions,Independent normal paired loss differences
+Regression planning assumptions,Independent normal errors; fixed full-rank design; one prespecified coefficient
+Time-series limitations,No dependence-aware achieved power; 12-month errors and annual origins are not assumed independent
+OLS selection limitation,k and retained macro count follow exploratory redundancy pruning; planning does not validate post-selection inference
+Sample selection,Chronological source availability; power calculations do not alter history or inflate N
+Forecast horizon,Future 12-month predictions are not evaluation observations
+Next research step,Prespecified effects and dependence-aware power simulation of the complete selection/evaluation procedure

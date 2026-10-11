@@ -1,0 +1,7 @@
+RQ,Historical_months,Development_calendar_months,Usable_training_rows,Final_holdout_pairs,Observed_OLS_months,One_step_rolling_pairs,Inner_validation_origins,Inner_validation_forecast_rows,Twelve_month_backtest_origins,Sample_note
+RQ1,120,108,96,12,0,0,4,48,0,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N
+RQ2,120,108,96,12,0,0,4,48,0,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N
+RQ3,120,108,96,0,73,0,0,0,0,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N
+RQ4,120,108,96,12,0,60,0,0,0,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N
+RQ5,120,108,96,12,0,60,0,0,0,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N
+RQ6,120,108,96,12,0,60,0,0,5,Months/forecast rows/origins are distinct; dependence prevents treating them as independent N

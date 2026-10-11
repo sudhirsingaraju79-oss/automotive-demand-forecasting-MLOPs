@@ -1,0 +1,5 @@
+Comparison,Loss,N_pairs,Mean_loss_A_minus_B,HAC_lags,HAC_z,HAC_p,Paired_t_p_sensitivity,Inference,Holm_p,Decision_at_05,Direction
+Ensemble vs Seasonal_Naive,absolute,12,11864.898396434879,3,2.0584279566265735,0.039549070373299244,0.19507634282037872,Exploratory; small/dependent time-series sample; not a formal DM test,0.15819628149319698,Fail to reject equality,A higher observed loss
+Ensemble vs Seasonal_Naive,squared,12,2403425611.3955293,3,1.7279954554917514,0.08398903913909862,0.20377815343029246,Exploratory; small/dependent time-series sample; not a formal DM test,0.2519671174172959,Fail to reject equality,A higher observed loss
+Ensemble vs Random_Forest,absolute,12,9159.204469613978,3,1.1459224309977574,0.2518272490731651,0.1562404453143204,Exploratory; small/dependent time-series sample; not a formal DM test,0.5036544981463302,Fail to reject equality,A higher observed loss
+Ensemble vs Random_Forest,squared,12,648255954.7578977,3,0.3587745906610812,0.7197637225906875,0.6699432896535453,Exploratory; small/dependent time-series sample; not a formal DM test,0.7197637225906875,Fail to reject equality,A higher observed loss

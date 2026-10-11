@@ -1,0 +1,9 @@
+Metric,Value
+Raw rows,66960
+Unique maker labels,558
+Monthly observations,120
+Start month,2016-10-01 00:00:00
+End month,2026-09-01 00:00:00
+Development months,108
+Final holdout months,12
+Economic variables,22
