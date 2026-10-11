@@ -2,7 +2,7 @@ name: Automotive Forecasting and Statistical Sample Planning
 
 # Save this file as .github/workflows/mlops.yml in your GitHub repository.
 # Supported layout:
-#   automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py (or repository root)
+#   automotive_capstone_results_statistical_sample/4w_forecast_capstone.py (or repository root)
 #   data/Final_vehicle_macrodata_2016_2026.xlsx (or repository root)
 # Python retains its configured 120-month study and 108/12 chronological split.
 
@@ -11,8 +11,8 @@ on:
   push:
     branches: [main]
     paths:
-      - "automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py"
-      - "4w_forecast_capstone_statistical_sample.py"
+      - "automotive_capstone_results_statistical_sample/4w_forecast_capstone.py"
+      - "4w_forecast_capstone.py"
       - "data/Final_vehicle_macrodata_2016_2026.xlsx"
       - "Final_vehicle_macrodata_2016_2026.xlsx"
       - ".github/workflows/mlops.yml"
@@ -59,9 +59,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          script="automotive_capstone_results_statistical_sample/4w_forecast_capstone_statistical_sample.py"
+          script="automotive_capstone_results_statistical_sample/4w_forecast_capstone.py"
           if [[ ! -f "$script" ]]; then
-            script="4w_forecast_capstone_statistical_sample.py"
+            script="4w_forecast_capstone.py"
           fi
           data="data/Final_vehicle_macrodata_2016_2026.xlsx"
           if [[ ! -f "$data" ]]; then
