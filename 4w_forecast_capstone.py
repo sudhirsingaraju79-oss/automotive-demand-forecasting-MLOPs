@@ -3242,68 +3242,114 @@ psutil==5.9.5
 
 
 #"""```
-name: Automotive Forecast Pipeline
+name: Automotive Forecasting and Statistical Sample Planning
+
+# Save this file as .github/workflows/mlops.yml in your GitHub repository.
+# Supported layout:
+#   automotive_capstone_results_statistical_sample/4w_forecast_capstone.py (or repository root)
+#   data/Final_vehicle_macrodata_2016_2026.xlsx (or repository root)
+# Python retains its configured 120-month study and 108/12 chronological split.
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main  # Automatically triggers on push to the main branch
+    branches: [main]
+    paths:
+      - "automotive_capstone_results_statistical_sample/4w_forecast_capstone.py"
+      - "4w_forecast_capstone.py"
+      - "data/Final_vehicle_macrodata_2016_2026.xlsx"
+      - "Final_vehicle_macrodata_2016_2026.xlsx"
+      - ".github/workflows/mlops.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: automotive-forecast-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-
-  register-dataset:
+  forecast:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r automotive_capstone_results_statistical_sample/requirements.txt
-      - name: Upload Dataset to Hugging Face Hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_project/model_building/data_register.py
+    timeout-minutes: 180
+    env:
+      CAPSTONE_OUTPUT_DIR: outputs/automotive_capstone
+      MPLBACKEND: Agg
+      PYTHONUNBUFFERED: "1"
+      OMP_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
 
-  data-prep:
-    needs: register-dataset
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r tourism_project/deployment/requirements.txt
-      - name: Run Data Preparation
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_project/model_building/prep.py
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          lfs: true
 
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
 
-  model-traning:
-    needs: data-prep
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r tourism_project/deployment/requirements.txt
-      - name: Start MLflow Server
+      - name: Install Python dependencies
         run: |
-          nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
-          sleep 5  # Wait for a moment to let the server starts
-      - name: Model Building
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_project/model_building/train.py
+          python -m pip install --upgrade pip
+          python -m pip install numpy==2.2.6 pandas==2.2.3 scipy==1.15.3 scikit-learn==1.6.1 statsmodels==0.14.4 matplotlib==3.10.3 openpyxl==3.1.5 xgboost==3.0.2
+          mkdir -p outputs
+          python -m pip freeze > outputs/environment.txt
 
+      - name: Locate and validate input files
+        shell: bash
+        run: |
+          set -euo pipefail
+          script="automotive_capstone_results_statistical_sample/4w_forecast_capstone.py"
+          if [[ ! -f "$script" ]]; then
+            script="4w_forecast_capstone.py"
+          fi
+          data="data/Final_vehicle_macrodata_2016_2026.xlsx"
+          if [[ ! -f "$data" ]]; then
+            data="Final_vehicle_macrodata_2016_2026.xlsx"
+          fi
+          test -f "$script" || { echo "Revised Python script is missing."; exit 1; }
+          test -f "$data" || { echo "Input Excel dataset is missing."; exit 1; }
+          echo "CAPSTONE_SCRIPT=$script" >> "$GITHUB_ENV"
+          echo "CAPSTONE_DATA_FILE=$data" >> "$GITHUB_ENV"
+          python -m py_compile "$script"
 
-  deploy-hosting:
-    runs-on: ubuntu-latest
-    needs: [model-traning,data-prep,register-dataset]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r tourism_project/deployment/requirements.txt
-      - name: Push files to Frontend Hugging Face Space
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_project/hosting/hosting.py
+      - name: Run complete forecasting and statistical sample planning
+        shell: bash
+        run: |
+          set -euo pipefail
+          python "$CAPSTONE_SCRIPT" 2>&1 | tee outputs/execution.log
 
+      - name: Verify statistical sample-size outputs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import pandas as pd
+          root = Path(os.environ["CAPSTONE_OUTPUT_DIR"])
+          plan = pd.read_csv(root / "Statistics/statistical_sample_size_planning.csv")
+          assert set(plan["RQ"]) == {f"RQ{i}" for i in range(1, 7)}
+          valid = plan.dropna(subset=["Required_independent_N"])
+          assert (valid["Power_at_required_N"] >= valid["Target_marginal_power"] - 1e-9).all()
+          assert (valid["Power_at_previous_N"] < valid["Target_marginal_power"]).all()
+          assert (plan["Actual_N"] >= 0).all()
+          assert (root / "Statistics/sample_size_assumptions.csv").is_file()
+          assert (root / "Statistics/sample_size_planning_comparison.png").is_file()
+          print(plan[["RQ", "Task", "Actual_N", "Required_independent_N", "Status"]].to_string(index=False))
+          PY
+
+      - name: Save results and execution log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automotive-capstone-${{ github.run_number }}
+          path: outputs/
+          if-no-files-found: warn
+          retention-days: 30
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 img= mpimg.imread("/content/ghithut_action.jpg")
