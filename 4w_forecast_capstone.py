@@ -3304,64 +3304,6 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python tourism_project/hosting/hosting.py
 ```
-"""
-
-# Install Git
-!apt-get install git
-
-# Set your Git identity (replace with your details)
-
-# config the HF space
-
-!git config --global user.email "sudhirsingaraju79@gmail.com"
-!git config --global user.name "Sudhir Singam"
-
-# Clone your GitHub repository
-#!git clone https://github.com/<--------GitHub UserName--------->/<--------GitHub Reponame--------->.git
-!git clone https://github.com/sudhirsingaraju79-oss/automotive-demand-forecasting-MLOPs.git
-#!git clone https://github.com/sudhirsingaraju79-oss/visit_us_prediction.git
-# Move your folder to the repository directory
-#!mv /content/tourism_project/ /content/<--------GitHub Reponame--------->
-#!mv /content/tourism_project/ /content/visit_us_prediction
-!mv /content/automotive_capstone_results_statistical_sample /content/automotive-demand-forecasting-MLOPs
-
-from google.colab import userdata
-import os, subprocess, tempfile
-
-with tempfile.TemporaryDirectory() as folder:
-    helper = os.path.join(folder, "askpass.sh")
-    with open(helper, "w") as file:
-        file.write(
-            '#!/bin/sh\n'
-            'case "$1" in\n'
-            '*Username*) printf "%s\\n" "$GH_USER";;\n'
-            '*) printf "%s\\n" "$GH_TOKEN";;\n'
-            'esac\n'
-        )
-    os.chmod(helper, 0o700)
-
-    env = os.environ.copy()
-    env.update(
-        GH_USER="sudhirsingaraju79-oss",
-        GH_TOKEN=userdata.get("GH_TOK"),
-        GIT_ASKPASS=helper,
-        GIT_TERMINAL_PROMPT="0"
-    )
-
-    subprocess.run(
-        ["git", "-c", "credential.helper=", "push",
-         "https://github.com/sudhirsingaraju79-oss/"
-         "automotive-demand-forecasting-MLOPs.git", "main"],
-        cwd="/content/automotive-demand-forecasting-MLOPs",
-        env=env, check=True
-    )
-
-"""# Output Evaluation
-
-- GitHub (link to repository, screenshot of folder structure and executed workflow)
-
-https://github.com/sudhirsingaraju79-oss/visit_us_prediction.git
-"""
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
