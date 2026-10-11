@@ -3237,3 +3237,4 @@ psutil==5.9.5
     - Add a note and select all required scopes.
     - Click ***Generate token***.
     - Copy the generated token and store it safely in a notepad.
+"""
