@@ -3303,7 +3303,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python tourism_project/hosting/hosting.py
-```
+
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
