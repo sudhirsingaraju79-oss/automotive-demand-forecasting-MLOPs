@@ -1,0 +1,11 @@
+Model,Feature_mode,Parameters,Imputation,Tuning
+Seasonal_Naive,With_macro,{},baseline,Early 60-month calibration only; frozen thereafter
+Ridge,With_macro,"{""alpha"": 9092.146585405108}",limited_1,Early 60-month calibration only; frozen thereafter
+Random_Forest,With_macro,"{""n_estimators"": 200, ""max_depth"": 5, ""min_samples_leaf"": 12, ""max_features"": 0.8653891499472981}",seasonal,Early 60-month calibration only; frozen thereafter
+SARIMA,With_macro,"{""order"": [1, 1, 0], ""seasonal_order"": [0, 1, 1, 12]}",baseline,Early 60-month calibration only; frozen thereafter
+XGBoost,With_macro,"{""n_estimators"": 300, ""max_depth"": 4, ""learning_rate"": 0.08665916638080007, ""min_child_weight"": 1.9825134911329294, ""subsample"": 0.6166643034248419, ""colsample_bytree"": 0.8143869806973789, ""reg_lambda"": 0.2809810471205708}",baseline,Early 60-month calibration only; frozen thereafter
+Seasonal_Naive,History_calendar,{},baseline,Early 60-month calibration only; frozen thereafter
+Ridge,History_calendar,"{""alpha"": 45.12313192130653}",baseline,Early 60-month calibration only; frozen thereafter
+Random_Forest,History_calendar,"{""n_estimators"": 100, ""max_depth"": 8, ""min_samples_leaf"": 2, ""max_features"": 0.8160618286452208}",baseline,Early 60-month calibration only; frozen thereafter
+SARIMA,History_calendar,"{""order"": [1, 1, 0], ""seasonal_order"": [0, 1, 1, 12]}",baseline,Early 60-month calibration only; frozen thereafter
+XGBoost,History_calendar,"{""n_estimators"": 200, ""max_depth"": 2, ""learning_rate"": 0.037714899483563935, ""min_child_weight"": 3.799874905515537, ""subsample"": 0.8608285446033667, ""colsample_bytree"": 0.6363802405800931, ""reg_lambda"": 1.2640222836321668}",baseline,Early 60-month calibration only; frozen thereafter

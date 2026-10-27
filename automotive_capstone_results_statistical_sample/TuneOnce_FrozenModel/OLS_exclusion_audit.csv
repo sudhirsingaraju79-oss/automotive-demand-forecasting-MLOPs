@@ -1,0 +1,29 @@
+Specification,Variable,Reason
+controlled=True; differenced=False,Consumer_Price_Index__(2012=100),Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,Consumer_Price_Index_for_Rural_Labourer,Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,"Net_Foreign_Direct_Investment_
+(US_$_Million)",Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,"Net_Portfolio_Investment_
+(US_$_Million)",Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,"Total_Investment_Inflows_
+(US_$_Million)",Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,"Foreign_Trade_Balance_Total_
+(US_$_Million)",Predefined alternative index/accounting redundancy
+controlled=True; differenced=False,Consumer_Price_Index__(2024=100),VIF > 10 (observed 2.55e+03); exploratory design-based pruning
+controlled=True; differenced=False,"Total_Retail_Payments_
+(₹_Crore)",VIF > 10 (observed 293); exploratory design-based pruning
+controlled=True; differenced=False,"Total_Digital_Payments_
+(₹_Crore)",VIF > 10 (observed 113); exploratory design-based pruning
+controlled=True; differenced=False,Consumer_Price_Index_for_Food_and_Beverages,VIF > 10 (observed 77.2); exploratory design-based pruning
+controlled=True; differenced=False,Wholesale_Price_Index_(2011-12=100),VIF > 10 (observed 47.4); exploratory design-based pruning
+controlled=True; differenced=False,Exchange_Rate_of_Indian_Rupee_vis-à-vis_US_Dollar,VIF > 10 (observed 23); exploratory design-based pruning
+controlled=True; differenced=False,"Foreign_Trade_Exports_Total_
+(US_$_Million)",VIF > 10 (observed 10.4); exploratory design-based pruning
+controlled=True; differenced=False,Consumer_Price_Index__(2012=100),VIF > 10 (observed 36.7); exploratory design-based pruning
+controlled=True; differenced=False,Consumer_Price_Index__(2024=100),VIF > 10 (observed 44.6); exploratory design-based pruning
+controlled=True; differenced=False,Consumer_Price_Index_for_Food_and_Beverages,VIF > 10 (observed 20.7); exploratory design-based pruning
+controlled=True; differenced=False,"Total_Retail_Payments_
+(₹_Crore)",VIF > 10 (observed 64.7); exploratory design-based pruning
+controlled=True; differenced=False,"Total_Digital_Payments_
+(₹_Crore)",VIF > 10 (observed 39.5); exploratory design-based pruning
+controlled=True; differenced=False,Exchange_Rate_of_Indian_Rupee_vis-à-vis_US_Dollar,VIF > 10 (observed 15.7); exploratory design-based pruning

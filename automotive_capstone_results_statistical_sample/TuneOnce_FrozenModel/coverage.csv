@@ -1,0 +1,8 @@
+RQ,Task,Historical_months,Unique_target_months,Origins,Forecast_rows,Inference_units,Required_IID_units,Alpha
+RQ1,12-month rolling,120,60.0,49.0,588.0,49,34,0.05
+RQ2,12-month rolling,120,60.0,49.0,588.0,49,34,0.05
+RQ4,12-month rolling,120,60.0,49.0,588.0,49,34,0.05
+RQ5,12-month rolling,120,60.0,49.0,588.0,49,34,0.05
+RQ6,One-step,120,60.0,60.0,60.0,60,34,0.05
+RQ3,Joint complete cases,120,,,,73,56,0.05
+RQ3,Expanded retained macros,120,,,,105,56,0.05

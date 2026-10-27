@@ -1,0 +1,2 @@
+Per_test_alpha,Target_power,Effect,Required_IID_units,Power_at_previous,Power_at_required,Degrees_of_freedom,Noncentrality,Critical_t,Formula,Approximate_normal_N
+0.05,0.8,0.5,34,0.7953658414875043,0.8077775012792738,33,2.9154759474226504,2.0345152974493383,P(T<-c)+P(T>c); df=n-1; nc=effect*sqrt(n),31.395518937396353
